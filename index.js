@@ -1,7 +1,9 @@
 // import http from 'http'
 import express from 'express'
 
-const app = express() 
+const app = express()
+
+app.use(express.json())
 
 let notes = [
     {
@@ -38,7 +40,7 @@ app.get('/api/notas', (request, response) => {
     response.json(notes)
 })
 
-app.get('/api/notas/:id', (request, response) => {
+app.get('/api/nota/:id', (request, response) => {
     const id = Number(request.params.id)
     const note = notes.find(note => note.id === id)
     if(note){
@@ -48,10 +50,34 @@ app.get('/api/notas/:id', (request, response) => {
     }
 })
 
-app.delete('/api/notas/:id', (request, response) => {
+app.delete('/api/nota/:id', (request, response) => {
     const id = Number(request.params.id)
     notes = notes.filter(note => note.id !== id)
     response.send(204)
+})
+
+app.post('/api/nota', (request,respons) => {
+    const note = request.body
+
+    if(!note || !note.content){
+        return respons.status(400).json({
+            error: 'El contenido de la nota esta vacia'
+        })
+    }
+
+    const ids =     notes.map(note => note.id)
+    const maxId = Math.max(...ids)
+
+    const newNota = {
+        id: maxId + 1,
+        content: note.content,
+        important: typeof note.important !== 'undefined' ? note.important : false,
+        date: new Date().toISOString()
+    }
+
+    notes = [...notes, newNota]
+    console.log(newNota)
+    respons.status(201).json(newNota)
 })
 
 const PORT = 4000

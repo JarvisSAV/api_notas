@@ -1,3 +1,0 @@
-DELETE http://localhost:4000/api/notas/2
-###
-GET http://localhost:4000/api/notas

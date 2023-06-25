@@ -1,0 +1,3 @@
+GET http://localhost:4000/api/notas
+###
+GET http://localhost:4000/api/nota/1
