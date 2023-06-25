@@ -38,6 +38,16 @@ app.get('/api/notas', (request, response) => {
     response.json(notes)
 })
 
+app.get('/api/notas/:id', (request, response) => {
+    const id = Number(request.params.id)
+    const note = notes.find(note => note.id === id)
+    if(note){
+        response.json(note)
+    }else{
+        response.send(404)
+    }
+})
+
 const PORT = 4000
 app.listen(PORT, () => {
     console.log(`Server runnin on port ${PORT}`)
