@@ -5,6 +5,14 @@ const app = express()
 
 app.use(express.json())
 
+app.use((request,response, next)=>{
+    console.log(request.method)
+    console.log(request.path)
+    console.log(request.body)
+    console.log('------------')
+    next()
+})
+
 let notes = [
     {
         "id": 1,
@@ -56,11 +64,11 @@ app.delete('/api/nota/:id', (request, response) => {
     response.send(204)
 })
 
-app.post('/api/nota', (request,respons) => {
+app.post('/api/nota', (request,response) => {
     const note = request.body
 
     if(!note || !note.content){
-        return respons.status(400).json({
+        return response.status(400).json({
             error: 'El contenido de la nota esta vacia'
         })
     }
@@ -77,7 +85,13 @@ app.post('/api/nota', (request,respons) => {
 
     notes = [...notes, newNota]
     console.log(newNota)
-    respons.status(201).json(newNota)
+    response.status(201).json(newNota)
+})
+
+app.use((request, response)=>{
+    response.status(404).json({
+        error:'not found'
+    })
 })
 
 const PORT = 4000
