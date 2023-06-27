@@ -1,17 +1,12 @@
 // import http from 'http'
 import express from 'express'
+import read from './readMiddleware.js'
 
 const app = express()
 
 app.use(express.json())
 
-app.use((request,response, next)=>{
-    console.log(request.method)
-    console.log(request.path)
-    console.log(request.body)
-    console.log('------------')
-    next()
-})
+app.use(read)
 
 let notes = [
     {
@@ -51,9 +46,9 @@ app.get('/api/notas', (request, response) => {
 app.get('/api/nota/:id', (request, response) => {
     const id = Number(request.params.id)
     const note = notes.find(note => note.id === id)
-    if(note){
+    if (note) {
         response.json(note)
-    }else{
+    } else {
         response.send(404)
     }
 })
@@ -64,16 +59,16 @@ app.delete('/api/nota/:id', (request, response) => {
     response.send(204)
 })
 
-app.post('/api/nota', (request,response) => {
+app.post('/api/nota', (request, response) => {
     const note = request.body
 
-    if(!note || !note.content){
+    if (!note || !note.content) {
         return response.status(400).json({
             error: 'El contenido de la nota esta vacia'
         })
     }
 
-    const ids =     notes.map(note => note.id)
+    const ids = notes.map(note => note.id)
     const maxId = Math.max(...ids)
 
     const newNota = {
@@ -88,9 +83,9 @@ app.post('/api/nota', (request,response) => {
     response.status(201).json(newNota)
 })
 
-app.use((request, response)=>{
+app.use((request, response) => {
     response.status(404).json({
-        error:'not found'
+        error: 'not found'
     })
 })
 
