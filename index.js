@@ -1,6 +1,8 @@
 // import http from 'http'
-import express from 'express'
+import express, { response } from 'express'
 import read from './readMiddleware.js'
+import notes from './routes/notes.js'
+import conn from './services/conexion.js'
 
 const app = express()
 
@@ -8,40 +10,23 @@ app.use(express.json())
 
 app.use(read)
 
-let notes = [
-    {
-        "id": 1,
-        "content": "Hacer los foros de Saul",
-        "date": "2023-05-30T17:30:31.098Z",
-        "important": true
-    },
-    {
-        "id": 2,
-        "content": "Respirar 24/7",
-        "date": "2023-05-30T18:39:34.091Z",
-        "important": false
-    },
-    {
-        "id": 3,
-        "content": "No discutir con los maestros",
-        "date": "2023-05-30T19:20:14.298Z",
-        "important": true
-    }
-]
-
 // const app = http.createServer((_request, _response) => {
 //     _response.writeHead(200, { 'Content-Type': 'application/json' })
 //     _response.end(JSON.stringify(notes))
 //     // _resp.end('Hello World')
 // })
 
-app.get('/', (request, response) => {
-    response.send('<h1>Hola Mundo</h1>')
+app.get('/ping', (request, response) => {
+    response.send('<h1>Pong</h1>')
 })
 
-app.get('/api/notas', (request, response) => {
-    response.json(notes)
-})
+// app.get('/api/notas', async (_req, resp) =>{
+//     conn.query('select * from notes',(error, result, fields)=>{
+//         resp.send(result);
+//     })
+// })
+
+app.get('/api/notas', notes)
 
 app.get('/api/nota/:id', (request, response) => {
     const id = Number(request.params.id)
@@ -49,14 +34,14 @@ app.get('/api/nota/:id', (request, response) => {
     if (note) {
         response.json(note)
     } else {
-        response.send(404)
+        response.sendStatus(404)
     }
 })
 
 app.delete('/api/nota/:id', (request, response) => {
     const id = Number(request.params.id)
     notes = notes.filter(note => note.id !== id)
-    response.send(204)
+    response.status(204)
 })
 
 app.post('/api/nota', (request, response) => {
