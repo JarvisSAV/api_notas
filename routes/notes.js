@@ -16,38 +16,38 @@ router.get('/', async (_req, res) => {
     const results = await productoServices.getAll()
     res.send(results)
   } catch (error) {
-    console.error(error)
+    console.error({ error })
     res.status(500).send({ error: error_server })
   }
 })
 
 //retorna productos de un tipo y con un limite
-router.get('/:tipo/:limit', async (_req, res) => {
-  try {
-    const results = await productoServices.getHome({ tipo: _req.params.tipo, limit: _req.params.limit })
-    res.send(results)
-  } catch (error) {
-    console.error(error)
-    res.status(500).send({ error: error_server })
-  }
-})
-
-//crea un producto
-// router.post('/', upload, async (_req, res) => {
+// router.get('/:tipo/:limit', async (_req, res) => {
 //   try {
-//       const results = await productoServices.crearProducto({ body: _req.body, files: _req.files })
-//       if (results > 0) {
-//         console.log('true')
-//         res.send({ msg: 'Producto creado correctamente' })
-//       } else {
-//         console.log('false')
-//         res.send({ error: 'error al crear el producto' })
-//       }
+//     const results = await productoServices.getHome({ tipo: _req.params.tipo, limit: _req.params.limit })
+//     res.send(results)
 //   } catch (error) {
 //     console.error(error)
 //     res.status(500).send({ error: error_server })
 //   }
 // })
+
+//crea un producto
+router.post('/', async (_req, res) => {
+  try {
+    const results = await notesServices.postNote({ body: _req.body })
+    if (results > 0) {
+      console.log('Nota creado correctamente')
+      res.send({ msg: 'Nota creado correctamente' })
+    } else {
+      console.log({error : 'error al crear la nota'})
+      res.send({ error: 'error al crear la nota' })
+    }
+  } catch (error) {
+    console.error(error)
+    res.status(500).send({ error: error_server })
+  }
+})
 
 //edita un producto
 // router.put('/', upload, async (_req, res) => {
@@ -80,10 +80,10 @@ router.get('/:tipo/:limit', async (_req, res) => {
 router.delete('/:id/', async (_req, res) => {
   try {
     const results = await productoServices.deleteProduct({ id: _req.params.id })
-    if(results > 0){
-      res.send({msg: 'Producto eliminado correctamente'})
-    }else{
-      res.status(404).send({msg: 'Error al eliminar'})
+    if (results > 0) {
+      res.send({ msg: 'Producto eliminado correctamente' })
+    } else {
+      res.status(404).send({ msg: 'Error al eliminar' })
     }
   } catch (error) {
     console.error(error)

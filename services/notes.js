@@ -20,15 +20,19 @@ export const getOneNote = ({ id }) => {
 			} else {
 				resolve(results)
 			}
-		});
-	});
+		})
+	})
 }
 
-export const postNote = ({ body, files }) => {
-	const { content, important, date } = JSON.parse(body.producto)
+export const postNote = ({ body}) => {
+	let { content, important} = body
+	const dateNow = new Date()
+
+	important = typeof important !== 'undefined' ? important : false
+
 	return new Promise((resolve, reject) => {
-		conn.query(`INSERT INTO name values (null,?,?,?)`,
-			[content, important, date],
+		conn.query(`INSERT INTO notes values (null,?,?,?)`,
+			[content, dateNow.toISOString(), important],
 			(error, results, fields) => {
 				if (error) {
 					reject(error)
@@ -47,6 +51,6 @@ export const deleteNote = ({ id }) => {
 			} else {
 				resolve(results.affectedRows)
 			}
-		});
-	});
+		})
+	})
 }

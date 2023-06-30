@@ -1,6 +1,6 @@
 // import http from 'http'
 import express, { response } from 'express'
-import read from './readMiddleware.js'
+import read from './middleware/readMiddleware.js'
 import notes from './routes/notes.js'
 import conn from './services/conexion.js'
 
@@ -26,7 +26,7 @@ app.get('/ping', (request, response) => {
 //     })
 // })
 
-app.get('/api/notas', notes)
+app.use('/api/notas', notes)
 
 app.get('/api/nota/:id', (request, response) => {
     const id = Number(request.params.id)
@@ -44,29 +44,29 @@ app.delete('/api/nota/:id', (request, response) => {
     response.status(204)
 })
 
-app.post('/api/nota', (request, response) => {
-    const note = request.body
+// app.post('/api/nota', (request, response) => {
+//     const note = request.body
 
-    if (!note || !note.content) {
-        return response.status(400).json({
-            error: 'El contenido de la nota esta vacia'
-        })
-    }
+//     if (!note || !note.content) {
+//         return response.status(400).json({
+//             error: 'El contenido de la nota esta vacia'
+//         })
+//     }
 
-    const ids = notes.map(note => note.id)
-    const maxId = Math.max(...ids)
+//     const ids = notes.map(note => note.id)
+//     const maxId = Math.max(...ids)
 
-    const newNota = {
-        id: maxId + 1,
-        content: note.content,
-        important: typeof note.important !== 'undefined' ? note.important : false,
-        date: new Date().toISOString()
-    }
+//     const newNota = {
+//         id: maxId + 1,
+//         content: note.content,
+//         important: typeof note.important !== 'undefined' ? note.important : false,
+//         date: new Date().toISOString()
+//     }
 
-    notes = [...notes, newNota]
-    console.log(newNota)
-    response.status(201).json(newNota)
-})
+//     notes = [...notes, newNota]
+//     console.log(newNota)
+//     response.status(201).json(newNota)
+// })
 
 app.use((request, response) => {
     response.status(404).json({

@@ -1,4 +1,4 @@
-POST http://localhost:4000/api/nota
+POST http://localhost:4000/api/notas
 Content-Type: application/json
 
 {
@@ -6,14 +6,14 @@ Content-Type: application/json
     "important": true
 }
 ###
-POST http://localhost:4000/api/nota
+POST http://localhost:4000/api/notas
 Content-Type: application/json
 
 {
-    "content": "Nueva nota"
+    "content": "Nueva nota 2.0"
 }
 ###
-POST http://localhost:4000/api/nota
+POST http://localhost:4000/api/notas
 Content-Type: application/json
 
 {
